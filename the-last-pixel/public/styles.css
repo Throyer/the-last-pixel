@@ -1,0 +1,14 @@
+/* 
+  TODO: Provavelmente mudar esse conceito de pixel, pois a movimentação
+  fica travada 
+*/
+body canvas {
+    margin-top: 10%;
+    border: 12px solid #c6c6c6;
+    background-color: lightcoral;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    width: 500px;
+    height: 500px;
+  }
