@@ -1,14 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Press Start 2P", cursive;
+  font: sans-serif;
+  background: #f0f0f5;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* 
   TODO: Provavelmente mudar esse conceito de pixel, pois a movimentação
   fica travada 
 */
 body canvas {
-    margin-top: 10%;
+  margin-top: 200px;
     border: 12px solid #c6c6c6;
-    background-color: lightcoral;
+    background-color: #bdfcda;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     image-rendering: -moz-crisp-edges;
-    width: 500px;
-    height: 500px;
   }
