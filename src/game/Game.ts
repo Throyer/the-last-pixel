@@ -2,11 +2,11 @@ import Engine from "../core/Engine";
 import { randomBetween, randomItems } from "../uitls/random";
 import Player from "./objects/Player";
 import Resource from "./objects/Resource";
-import Carvao from "./prefabs/Carvao";
-import Trigo from "./prefabs/Trigo";
 import Point2D from "./objects/Point2D";
-import Madeira from "./prefabs/Madeira";
 import GameObject from "./objects/GameObject";
+import carvaoFactory from "./prefabs/factories/carvaoFactory";
+import trigoFactory from "./prefabs/factories/trigoFactory";
+import madeiraFactory from "./prefabs/factories/madeiraFactory";
 
 export default class Game {
   engine: Engine;
@@ -16,7 +16,7 @@ export default class Game {
 
   constructor(engine: Engine) {
     this.engine = engine;
-    this.resources = this.criarRecursos(5);
+    this.resources = this.criarRecursos(10);
     this.player = new Player();
     this.entities = [...this.resources, this.player];
 
@@ -51,35 +51,25 @@ export default class Game {
   criarRecursos(quantidade: number): Resource[] {
     const { width, height } = this.engine.canvas;
 
-    const carvao: (posicao: Point2D, quantidade: number) => Carvao
-      = (posicao, quantidade) => new Carvao({ posicao, quantidade });
-
-    const madeira: (posicao: Point2D, quantidade: number) => Madeira
-      = (posicao, quantidade) => new Madeira({ posicao, quantidade });
-
-    const trigo: (posicao: Point2D, quantidade: number) => Trigo
-      = (posicao, quantidade) => new Trigo({ posicao, quantidade });
-
-    let tipos: Array<(posicao: Point2D, quantidade: number) => Resource> = [
-      carvao,
-      trigo,
-      madeira
+    let factories: Array<(posicao: Point2D, quantidade: number) => Resource> = [
+      carvaoFactory,
+      trigoFactory,
+      madeiraFactory
     ];
 
-    let resources: Resource[] = [];
-    for (let i = 0; i < quantidade; i++) {
-
+    return Array.from({ length: quantidade })
+      .map((): Resource => {
+      
       const posicao: Point2D = {
         x: randomBetween(0, width),
         y: randomBetween(0, height)
       };
 
-      const getResource = randomItems(tipos);
+      const getResource = randomItems(factories);
       const resource = getResource(posicao, randomBetween(1, 13));
 
-      resources = [...resources, resource];
-    }
-    return resources;
+      return resource;
+    });
   }
 
   canMove(object: GameObject): boolean {
