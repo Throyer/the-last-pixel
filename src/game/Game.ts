@@ -7,6 +7,7 @@ import GameObject from "./objects/GameObject";
 import carvaoFactory from "./prefabs/factories/carvaoFactory";
 import trigoFactory from "./prefabs/factories/trigoFactory";
 import madeiraFactory from "./prefabs/factories/madeiraFactory";
+import ShowFps from "./prefabs/ShowFps";
 
 export default class Game {
   engine: Engine;
@@ -14,16 +15,11 @@ export default class Game {
   resources: Resource[] = [];
   entities: GameObject[] = [];
 
-  // controlar o fps
-  currentSecond: number = 0;
-  frameCount: number = 0;
-  framesLastSecond: number = 0;
-
   constructor(engine: Engine) {
     this.engine = engine;
     this.resources = this.criarRecursos(10);
     this.player = new Player();
-    this.entities = [...this.resources, this.player];
+    this.entities = [new ShowFps(),...this.resources, this.player];
 
     document.addEventListener("keydown", ({ key }) => {
       if (this.canMove(this.player)) {
@@ -47,21 +43,9 @@ export default class Game {
   start(): void {
     this.engine.start();
     this.engine.update = (context) => {
-
-      let sec = Math.floor(Date.now() / 1000);
-      if (sec != this.currentSecond) {
-        this.currentSecond = sec;
-        this.framesLastSecond = this.frameCount;
-        this.frameCount = 1;
-      }
-      else { this.frameCount++; }
-
       this.entities.forEach(entity => {
         entity.udpate(context);
       });
-
-      context.fillStyle = "#FF0000";
-      context.fillText(`FPS: ${this.framesLastSecond}`, 10, 20);
     };
   }
 
