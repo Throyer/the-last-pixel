@@ -18,39 +18,20 @@ export default class Game {
     this.engine = engine;
     this.resources = this.criarRecursos(5);
     this.player = new Player();
-    this.entities = [this.player, ...this.resources];
+    this.entities = [...this.resources, this.player];
 
     document.addEventListener("keydown", ({ key }) => {
-      const canMove = (player: Player): boolean => {
-        const {
-          posicao: { x, y },
-          largura,
-          altura,
-        } = player;
-        const { width, height } = engine.canvas;
-        return x > 0 && y > 0 && x < width - largura && y < height - altura;
-      };
-
-      if (canMove(this.player)) {
+      if (this.canMove(this.player)) {
         this.player.move(key);
       }
 
       if (key === "c") {
         this.resources.forEach(resource => {
-
           if (resource.isIntersect(this.player)) {
-
-            const item = this.player.inventario.find((item) => item.nome == resource.nome);
-
-            if (item) {
-              item.quantidade++;
-            } else {
-              this.player.inventario.push(new Resource({ ...resource, quantidade: 1 }));
-            }
-            resource.quantidade--;
+            this.player.collect(resource);
             if (resource.quantidade === 0) {
               this.entities = this.entities.filter((entity) => entity.id !== resource.id);
-              this.resources = this.resources.filter((r) => r.id !== resource.id);
+              this.resources = this.resources.filter((_resource) => _resource.id !== resource.id);
             }
           }
         })
@@ -99,6 +80,16 @@ export default class Game {
       resources = [...resources, resource];
     }
     return resources;
+  }
+
+  canMove(object: GameObject): boolean {
+    const {
+      posicao: { x, y },
+      largura,
+      altura,
+    } = object;
+    const { width, height } = this.engine.canvas;
+    return x > 0 && y > 0 && x < width - largura && y < height - altura;
   }
 }
 
