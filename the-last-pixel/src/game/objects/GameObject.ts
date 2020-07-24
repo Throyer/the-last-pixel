@@ -1,33 +1,39 @@
 import { uuid } from "uuidv4";
+import Point2D from "./Point2D";
+
 
 export default abstract class GameObject {
   id: string;
-  position: {
-    x: number;
-    y: number;
-  };
+  posicao: Point2D;
   largura: number;
   altura: number;
-  color: string;
+  cor: string;
 
   constructor({
-    position,
+    posicao,
     largura,
     altura,
-    color,
+    cor,
   }: {
-    position: {
-      x: number;
-      y: number;
-    };
+    posicao: Point2D
     largura: number;
     altura: number;
-    color: string;
+    cor: string;
   }) {
     this.id = uuid();
-    this.position = position;
+    this.posicao = posicao;
     this.largura = largura;
     this.altura = altura;
-    this.color = color;
+    this.cor = cor;
+  }
+
+  abstract udpate(context: CanvasRenderingContext2D): void;
+
+  public isIntersect(gameObject: GameObject): boolean {
+    return (
+      this.posicao.x < gameObject.posicao.x + gameObject.largura &&
+      this.posicao.x + this.largura > gameObject.posicao.x &&
+      this.posicao.y < gameObject.posicao.y + gameObject.altura &&
+      this.posicao.y + this.altura > gameObject.posicao.y)
   }
 }
