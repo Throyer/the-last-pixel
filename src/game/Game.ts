@@ -14,6 +14,11 @@ export default class Game {
   resources: Resource[] = [];
   entities: GameObject[] = [];
 
+  // controlar o fps
+  currentSecond: number = 0;
+  frameCount: number = 0;
+  framesLastSecond: number = 0;
+
   constructor(engine: Engine) {
     this.engine = engine;
     this.resources = this.criarRecursos(10);
@@ -42,9 +47,21 @@ export default class Game {
   start(): void {
     this.engine.start();
     this.engine.update = (context) => {
+
+      let sec = Math.floor(Date.now() / 1000);
+      if (sec != this.currentSecond) {
+        this.currentSecond = sec;
+        this.framesLastSecond = this.frameCount;
+        this.frameCount = 1;
+      }
+      else { this.frameCount++; }
+
       this.entities.forEach(entity => {
         entity.udpate(context);
       });
+
+      context.fillStyle = "#FF0000";
+      context.fillText(`FPS: ${this.framesLastSecond}`, 10, 20);
     };
   }
 
@@ -59,17 +76,17 @@ export default class Game {
 
     return Array.from({ length: quantidade })
       .map((): Resource => {
-      
-      const posicao: Point2D = {
-        x: randomBetween(0, width),
-        y: randomBetween(0, height)
-      };
 
-      const getResource = randomItems(factories);
-      const resource = getResource(posicao, randomBetween(1, 13));
+        const posicao: Point2D = {
+          x: randomBetween(0, width),
+          y: randomBetween(0, height)
+        };
 
-      return resource;
-    });
+        const getResource = randomItems(factories);
+        const resource = getResource(posicao, randomBetween(1, 13));
+
+        return resource;
+      });
   }
 
   canMove(object: GameObject): boolean {
