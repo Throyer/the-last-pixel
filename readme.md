@@ -54,4 +54,4 @@ Tecnologia utilizada:
 - [Node.js](https://nodejs.org/en/)
 - [Typescript](https://www.typescriptlang.org/)
 ---
-Jogo desenvolvido por 🎮 | [@throyer](https://github.com/Throyer), [@thelokys](https://github.com/thelokys)
+Jogo desenvolvido por 🎮 | [@throyer](https://github.com/Throyer) 🎮 | [@thelokys](https://github.com/thelokys)
