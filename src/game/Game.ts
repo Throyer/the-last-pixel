@@ -7,6 +7,7 @@ import GameObject from "./objects/GameObject";
 import carvaoFactory from "./prefabs/factories/carvaoFactory";
 import trigoFactory from "./prefabs/factories/trigoFactory";
 import madeiraFactory from "./prefabs/factories/madeiraFactory";
+import ShowFps from "./prefabs/ShowFps";
 
 export default class Game {
   engine: Engine;
@@ -18,7 +19,7 @@ export default class Game {
     this.engine = engine;
     this.resources = this.criarRecursos(10);
     this.player = new Player();
-    this.entities = [...this.resources, this.player];
+    this.entities = [new ShowFps(),...this.resources, this.player];
 
     document.addEventListener("keydown", ({ key }) => {
       if (this.canMove(this.player)) {
@@ -59,17 +60,17 @@ export default class Game {
 
     return Array.from({ length: quantidade })
       .map((): Resource => {
-      
-      const posicao: Point2D = {
-        x: randomBetween(0, width),
-        y: randomBetween(0, height)
-      };
 
-      const getResource = randomItems(factories);
-      const resource = getResource(posicao, randomBetween(1, 13));
+        const posicao: Point2D = {
+          x: randomBetween(0, width),
+          y: randomBetween(0, height)
+        };
 
-      return resource;
-    });
+        const getResource = randomItems(factories);
+        const resource = getResource(posicao, randomBetween(1, 13));
+
+        return resource;
+      });
   }
 
   canMove(object: GameObject): boolean {
